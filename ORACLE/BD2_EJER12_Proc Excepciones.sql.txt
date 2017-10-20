@@ -1,0 +1,226 @@
+/*
+1. Cree el procedimiento P_ABM_AREAS. El procedimiento deberá recibir los siguientes
+parámetros:
+- Id del área
+- Nombre del área
+- Id_area superior
+- Operación (A, B, M)
+Cree 3 funciones internas que se encargarán de la modificación, borrado y alta
+respectivamente. Cada función deberá prever las excepciones (clave inexistente, clave
+duplicada, etc). También prevea posibles excepciones en el procedimiento principal.
+Tenga en cuenta lo siguiente:
+- Sólo el ID área y el código de operación son obligatorios
+- Si el código de operación es diferente a ‘A’,’B’ o ‘M’ se deberá levantar (raise) un
+mensaje de error (utilizar los rangos habilitados por el ORACLE).
+*/
+
+------------------------------------------------------------------------------------
+DECLARE
+  A BOOLEAN;
+  ID NUMBER := 1;
+  NOMBRE VARCHAR2(40) := 'TEST1';
+  ID_S NUMBER := 1;
+  METODO VARCHAR2(1) := 'A';
+  FECHA DATE := SYSDATE;
+  ACTIVO VARCHAR2(1) := 'S';
+BEGIN
+  P_ABM_AREAS
+  (
+      ID,
+      NOMBRE,
+      ID_S,
+      METODO,
+      FECHA,
+      ACTIVO
+   );
+END;
+
+SELECT * FROM B_AREAS ORDER BY B_AREAS.ID DESC
+------------------------------------------------------------------------------------
+
+
+-------------------------------P_ABM_AREAS PROCEDURE-----------------------------------------------------
+SELECT ( LINE ||'/'|| POSITION ||' '|| TEXT ) ERROR FROM SYS.USER_ERRORS WHERE NAME = 'P_ABM_AREAS' AND TYPE = 'PROCEDURE';
+
+CREATE OR REPLACE PROCEDURE
+P_ABM_AREAS
+(
+    P_ID_AREA NUMBER DEFAULT NULL,
+    P_NOMBRE_AREA VARCHAR2 DEFAULT NULL,
+    P_ID_AREA_SUPERIOR NUMBER DEFAULT NULL,
+    P_OPERACION VARCHAR2 DEFAULT NULL,
+    P_FECHA DATE DEFAULT NULL,
+    P_ACTIVA VARCHAR2 DEFAULT NULL
+)
+AS
+  EXC_INV_OP EXCEPTION;
+  EXC_ID_AREA_REQ EXCEPTION;
+  EXC_BAJA_FAILED EXCEPTION;
+  EXC_ALTA_FAILED EXCEPTION;
+  EXC_MODIF_FAILED EXCEPTION;
+  RESPONSE BOOLEAN := FALSE;
+  ID NUMBER := P_ID_AREA;
+  NOMBRE VARCHAR2(40) := P_NOMBRE_AREA;
+  ID_S NUMBER := P_ID_AREA_SUPERIOR;
+  FECHA DATE := P_FECHA;
+  ACTIVA VARCHAR2(1) := P_ACTIVA;
+BEGIN
+  IF P_ID_AREA IS NULL THEN
+      RAISE EXC_ID_AREA_REQ;
+    ELSIF P_OPERACION = 'A' THEN
+      IF ALTA( ID, NOMBRE, ID_S ) = FALSE THEN
+        RAISE EXC_ALTA_FAILED;
+      END IF;
+    ELSIF P_OPERACION = 'B' THEN
+      IF BAJA( ID ) = FALSE THEN
+        RAISE EXC_BAJA_FAILED;
+      END IF;
+    ELSIF P_OPERACION = 'M' THEN
+      IF MODIFICACION( ID, NOMBRE, FECHA, ACTIVA, ID_S ) = FALSE THEN
+        RAISE EXC_MODIF_FAILED;
+      END IF;
+    ELSE
+      RAISE EXC_INV_OP;
+  END IF;
+EXCEPTION
+  WHEN EXC_INV_OP THEN
+    DBMS_OUTPUT.PUT_LINE ('OPERACION INVALIDA.');
+  WHEN EXC_ID_AREA_REQ THEN
+    DBMS_OUTPUT.PUT_LINE ('ID AREA IS REQUIRED.');
+  WHEN EXC_ALTA_FAILED THEN
+    DBMS_OUTPUT.PUT_LINE ('OCURRIO UN ERROR AL INTENTAR CREAR AREA.');
+  WHEN EXC_BAJA_FAILED THEN
+    DBMS_OUTPUT.PUT_LINE ('OCURRIO UN ERROR AL INTENTAR BORRAR AREA.');
+  WHEN EXC_MODIF_FAILED THEN
+    DBMS_OUTPUT.PUT_LINE('OCURRIO UN ERROR AL INTENTAR MODIFICAR AREA.');
+  WHEN OTHERS THEN
+    DBMS_OUTPUT.PUT_LINE ('OCURRIO UN ERROR EN EL PROCEDURE. ' || GET_ERROR( SQLCODE, SQLERRM ));
+END;
+-------------------------------------GET_ERROR FUNCTION-----------------------------------------------
+SELECT ( LINE ||'/'|| POSITION ||' '|| TEXT ) ERROR FROM SYS.USER_ERRORS WHERE NAME = 'GET_ERROR' AND TYPE = 'FUNCTION';
+
+CREATE OR REPLACE FUNCTION GET_ERROR( ERROR_CODE VARCHAR2, ERROR_MESSAGE VARCHAR2 ) RETURN VARCHAR2
+IS
+  MESSAGE VARCHAR2(100);
+BEGIN
+  IF ERROR_CODE = -1 THEN
+    MESSAGE := ' ERROR DE DUPLICADO.';
+
+    ELSE
+      MESSAGE :=  '[ ' || TO_CHAR(ERROR_CODE)||': '|| ERROR_MESSAGE || ' ]';
+  END IF;
+
+  RETURN MESSAGE;
+END;
+
+----------------------------BAJA FUNCTION--------------------------------------------------------
+SELECT ( LINE ||'/'|| POSITION ||' '|| TEXT ) ERROR FROM SYS.USER_ERRORS WHERE NAME = 'BAJA' AND TYPE = 'FUNCTION';
+
+CREATE OR REPLACE FUNCTION
+BAJA( P_ID NUMBER DEFAULT NULL ) RETURN BOOLEAN
+IS BEGIN
+  DELETE FROM B_AREAS WHERE ID = P_ID;
+  RETURN TRUE;
+EXCEPTION
+  WHEN OTHERS THEN
+    DBMS_OUTPUT.PUT_LINE('OCURRIO UN ERROR EN METODO BAJA '|| GET_ERROR( SQLCODE, SQLERRM ) );
+    RETURN FALSE;
+END;
+------------------------------------------------------------------------------------
+
+
+---------------------------------MODIFICACION FUNCTION---------------------------------------------------
+SELECT ( LINE ||'/'|| POSITION ||' '|| TEXT ) ERROR FROM SYS.USER_ERRORS WHERE NAME = 'MODIFICACION' AND TYPE = 'FUNCTION';
+
+CREATE OR REPLACE FUNCTION
+MODIFICACION
+(
+  P_ID B_AREAS.ID%TYPE,
+  P_NOMBRE B_AREAS.NOMBRE_AREA%TYPE,
+  P_FECHA B_AREAS.FECHA_CREA%TYPE,
+  P_ACTIVA B_AREAS.ACTIVA%TYPE,
+  P_ID_S B_AREAS.ID_AREA_SUPERIOR%TYPE
+) RETURN BOOLEAN
+IS BEGIN
+  UPDATE
+    B_AREAS
+  SET
+    NOMBRE_AREA = P_NOMBRE,
+    FECHA_CREA = P_FECHA,
+    ID_AREA_SUPERIOR = P_ID_S,
+    ACTIVA = P_ACTIVA
+  WHERE
+    ID = P_ID;
+  RETURN TRUE;
+EXCEPTION
+  WHEN OTHERS THEN
+  DBMS_OUTPUT.PUT_LINE('ERROR EN METODO MODIFICACION. ' || GET_ERROR( SQLCODE, SQLERRM ));
+  RETURN FALSE;
+END;
+------------------------------------------------------------------------------------
+
+
+------------------------------------ALTA FUNCTION------------------------------------------------
+SELECT ( LINE ||'/'|| POSITION ||' '|| TEXT ) ERROR FROM SYS.USER_ERRORS WHERE NAME = 'ALTA' AND TYPE = 'FUNCTION';
+
+CREATE OR REPLACE FUNCTION
+ALTA
+(
+  P_ID NUMBER DEFAULT NULL,
+  P_NOMBRE_AREA VARCHAR2 DEFAULT '' ,
+  P_ID_AREA_SUPERIOR NUMBER DEFAULT NULL
+) RETURN BOOLEAN
+IS BEGIN
+  INSERT INTO
+    B_AREAS( ID, NOMBRE_AREA, FECHA_CREA, ACTIVA, ID_AREA_SUPERIOR )
+  VALUES
+  (
+    P_ID,
+    P_NOMBRE_AREA,
+    ( SELECT SYSDATE FROM DUAL ),
+    'S',
+    P_ID_AREA_SUPERIOR
+  );
+  DBMS_OUTPUT.PUT_LINE('AREA CREADA CORRECTAMENTE.');
+  COMMIT;
+  RETURN TRUE;
+EXCEPTION
+  WHEN OTHERS THEN
+    DBMS_OUTPUT.PUT_LINE('OCURRIO UN ERROR EN METODO BAJA' || GET_ERROR( SQLCODE, SQLERRM ));
+    RETURN FALSE;
+END;
+------------------------------------------------------------------------------------
+/*
+
+2. Cree la tabla ERRORES_ORACLE con un solo campo:
+MENSAJE_ERROR VARCHAR2(150).
+Cree el procedimiento P_OBTENER_ERRORES que hará lo siguiente:
+- Definir un ciclo de 1 a 9999,
+- Por cada iteración, obtener el mensaje ORACLE del error correspondiente al
+número de la iteración.
+Recuerde que los números de mensaje de ORACLE son negativos.
+Inserte en la tabla el mensaje de error obtenido.
+
+*/
+
+/*
+
+3. El error ORA-01476 es provocado cuando se intenta dividir un número por cero. Cree
+un PL/SQL anónimo que haga lo siguiente:
+ Declarar una variable de tipo excepción denominada “DIVISION_X_CERO”.
+ Asignar a la excepción el error -1476 de ORACLE
+ Calcular el siguiente ratio financiero a partir de los saldos acumulados del MAYOR:
+ Activo / Pasivo (Activo = suma de saldos de las cuentas 1000000 a 1999999 y Pasivo =
+suma de saldos de las cuentas de 2000000 a 2999999).
+ En el área de excepción, prever que se produzca la excepción definida.
+4. Cree un procedimiento denominado P_INSERTAR_VENTA. El procedimiento recibirá
+como parámetro el ID de venta, el ID del artículo y la cantidad.
+El procedimiento deberá:
+- Declarar la excepción STOCK_INSUFICIENTE.
+- Verificar que la cantidad introducida por parámetro no exceda al stock actual. En
+caso de exceder, debe levantar la excepción STOCK_INSUFICIENTE.
+- Prever también la excepción que el artículo no exista.
+- Si se dan las condiciones, inserte una línea de detalle de venta (el número ítem
+deberá ser secuencial al último creado).
+
+*/

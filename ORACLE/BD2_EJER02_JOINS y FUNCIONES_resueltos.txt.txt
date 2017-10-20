@@ -1,0 +1,258 @@
+======================================================================================
+1. El campo file_name del archivo DBA_DATA_FILES contiene el nombre y camino de los
+archivos físicos que conforman los espacios de tabla de la Base de Datos. Seleccione:
+-Solamente el nombre del archivo (sin mencionar la carpeta o camino)
+-Solamente la carpeta o camino (sin mencionar el archivo)
+
+  SELECT
+    FILE_NAME,
+    SUBSTR( FILE_NAME, INSTR( FILE_NAME, '\', -1, 1) + 1 ) AS FILENAME,
+    SUBSTR( FILE_NAME, 0, INSTR( FILE_NAME, '\', -1, 1) + 1 ) AS PATH
+  FROM
+    DBA_DATA_FILES;
+
+=======================================================================================
+2-Obtenga la lista de empleados con su posición y salario vigente (El salario y la categoría
+vigente tienen la fecha fin nula – Un solo salario está vigente en un momento dado). Debe
+listar:
+Nombre área, Apellido y nombre del empleado, Fecha Ingreso, categoría, salario actual
+La lista debe ir ordenada por nombre de área, y por apellido del funcionario.
+
+
+SELECT
+  AREAS.NOMBRE_AREA,
+  NOMBRE||' '||APELLIDO,
+  POSICION_ACTUAL.FECHA_INI AS FECHA_INGRESO,
+  CATEGORIAS_SALARIALES.NOMBRE_CAT AS CATEGORIA,
+  ASIGNACION  AS SALARIO_ACTUAL
+FROM
+  B_EMPLEADOS EMPLEADOS
+JOIN
+  B_POSICION_ACTUAL POSICION_ACTUAL
+  ON
+    EMPLEADOS.CEDULA = POSICION_ACTUAL.CEDULA
+JOIN
+  B_CATEGORIAS_SALARIALES CATEGORIAS_SALARIALES
+  ON
+    CATEGORIAS_SALARIALES.COD_CATEGORIA = POSICION_ACTUAL.COD_CATEGORIA
+JOIN
+  B_AREAS AREAS
+  ON
+    AREAS.ID = POSICION_ACTUAL.ID_AREA
+WHERE
+  POSICION_ACTUAL.FECHA_FIN IS NULL
+
+=======================================================================================
+
+======================================================================================
+3- Liste el libro DIARIO correspondiente al mes de enero del año 2012, tomando en cuenta la
+cabecera y el detalle. Debe listar los siguientes datos:
+ID_Asiento, Fecha, Concepto, Nro.Linea, código cuenta, nombre cuenta, Monto débito,
+Monto crédito (haga aparecer el monto del crédito o débito según el valor del campo
+débito_crédito – D ó C)
+
+SELECT
+  DIARIO_DETALLE.ID ID_ASIENTO,
+  DIARIO_CABECERA.FECHA FECHA,
+  DIARIO_CABECERA.CONCEPTO CONCEPTO,
+  DIARIO_DETALLE.NRO_LINEA NRO_LINEA,
+  DIARIO_DETALLE.CODIGO_CTA CODIGO_CTA,
+  CUENTAS.NOMBRE_CTA NOMBRE_CTA,
+  DIARIO_DETALLE.DEBE_HABER DEBE_HABER,
+  DECODE( DIARIO_DETALLE.DEBE_HABER, 'C', DIARIO_DETALLE.IMPORTE, 0 ) MONTO_CREDITO,
+  DECODE( DIARIO_DETALLE.DEBE_HABER, 'D', DIARIO_DETALLE.IMPORTE, 0 ) MONTO_DEBITO
+FROM
+  B_DIARIO_DETALLE DIARIO_DETALLE
+JOIN
+  B_DIARIO_CABECERA DIARIO_CABECERA
+  ON
+  DIARIO_DETALLE.NRO_LINEA = DIARIO_CABECERA.ID
+JOIN
+  B_CUENTAS CUENTAS
+  ON
+  CUENTAS.CODIGO_CTA = DIARIO_DETALLE.CODIGO_CTA
+WHERE
+  EXTRACT ( MONTH FROM DIARIO_CABECERA.FECHA ) = '01'
+AND
+  EXTRACT ( YEAR FROM DIARIO_CABECERA.FECHA ) = '2012'
+
+
+
+
+=======================================================================================
+4. Algunos empleados de la empresa son también clientes. Obtenga dicha lista a través de una
+operación de intersección. Liste cédula, nombre y apellido, teléfono. Tenga en cuenta sólo a
+las personas físicas (F) que tengan cédula. Recuerde que los tipos de datos para operaciones
+del álgebra relacional tienen que ser los mismos.
+
+  SELECT * FROM B_PERSONAS
+
+  SELECT
+    CEDULA,
+    NOMBRE,
+    APELLIDO,
+    TELEFONO
+  FROM
+    B_EMPLEADOS
+
+INTERSECT
+  SELECT
+    CEDULA,
+    NOMBRE,
+    APELLIDO,
+    TELEFONO
+  FROM
+    B_PERSONAS
+
+=======================================================================================
+5. Se pretende realizar el aumento salarial del 5% para todas las categorías. Debe listar la
+categoría (código y nombre), el importe actual, el importe aumentado al 5% (redondeando la
+cifra a la centena), y la diferencia.
+Formatee la salida para que los montos tengan los puntos de mil.
+
+SELECT
+  COD_CATEGORIA,
+  NOMBRE_CAT,
+  ASIGNACION,
+  REPLACE( TO_CHAR( ROUND(ASIGNACION * 1.05), '999,999,999' ), ',', '.') ASIGNACION_AUMENTADO
+FROM
+  B_CATEGORIAS_SALARIALES
+
+========================================================================================
+6. Se necesita tener la lista completa de personas (independientemente de su tipo), ordenando
+por nombre de localidad. Si la persona no tiene asignada una localidad, también debe
+aparecer. Liste Nombre de Localidad, Nombre y apellido de la persona, dirección, teléfono
+
+SELECT
+  LOCALIDAD.NOMBRE NOMBRE_LOCALIDAD,
+  PERSONAS.NOMBRE || ' ' || PERSONAS.APELLIDO NOMBRE_APELLIDO,
+  PERSONAS.DIRECCION DIRECCION,
+  PERSONAS.TELEFONO TELEFONO
+FROM
+  B_PERSONAS PERSONAS
+LEFT JOIN
+  B_LOCALIDAD LOCALIDAD
+  ON
+  PERSONAS.ID_LOCALIDAD = LOCALIDAD.ID
+ORDER BY
+  LOCALIDAD.NOMBRE ASC;
+
+
+
+=========================================================================================
+7. En base a la consulta anterior, liste todas las localidades, independientemente que existan
+personas en dicha localidad:
+
+
+SELECT
+  LOCALIDAD.NOMBRE NOMBRE_LOCALIDAD,
+  PERSONAS.NOMBRE || ' ' || PERSONAS.APELLIDO NOMBRE_APELLIDO,
+  PERSONAS.DIRECCION DIRECCION,
+  PERSONAS.TELEFONO TELEFONO
+FROM
+  B_PERSONAS PERSONAS
+RIGHT JOIN
+  B_LOCALIDAD LOCALIDAD
+  ON
+  PERSONAS.ID_LOCALIDAD = LOCALIDAD.ID
+ORDER BY
+  LOCALIDAD.NOMBRE ASC;
+
+
+
+==========================================================================================
+8. Obtenga la misma lista del ejercicio 5, pero asegurándose de listar todas las personas,
+independientemente que estén asociadas a una localidad, y todas las localidades, aún cuando
+no tengan personas asociadas.
+
+SELECT
+  LOCALIDAD.NOMBRE NOMBRE_LOCALIDAD,
+  PERSONAS.NOMBRE || ' ' || PERSONAS.APELLIDO NOMBRE_APELLIDO,
+  PERSONAS.DIRECCION DIRECCION,
+  PERSONAS.TELEFONO TELEFONO
+FROM
+  B_PERSONAS PERSONAS
+FULL JOIN
+  B_LOCALIDAD LOCALIDAD
+  ON
+  PERSONAS.ID_LOCALIDAD = LOCALIDAD.ID
+ORDER BY
+  LOCALIDAD.NOMBRE ASC;
+
+=======================================================================================
+9. Considerando la fecha de hoy, indique cuándo caerá el próximo DOMINGO.
+
+SELECT
+  NEXT_DAY( SYSDATE, 'SUNDAY' ) PROXIMO_DOMINGO
+FROM
+  DUAL
+
+========================================================================================
+10. Suponiendo que estamos el 1 de Febrero del 2014, utilice la función LAST_DAY para
+determinar si este año es bisiesto o no. Con CASE y con DECODE, haga aparecer la
+expresión ‘bisiesto’ o ‘no bisiesto’ según corresponda. Pruebe también con la fecha de hoy.
+
+SELECT
+  EXTRACT( DAY FROM LAST_DAY( '01-FEB-14' ) ) ANHO,
+    DECODE( EXTRACT( DAY FROM LAST_DAY( '01-FEB-14' ) ), '29', 'BISIESTO', '28', 'NO-BISIESTO', 'NINGUNO' ) año_es,
+  CASE
+    TO_CHAR( EXTRACT( DAY FROM LAST_DAY( '01-FEB-14' ) ) )
+    WHEN '29' THEN 'BISIESTO'
+    WHEN '28' THEN 'NO-BISIESTO'
+    ELSE 'NINGUNO'
+  END
+FROM
+  DUAL
+
+============================================================================================
+NO TERMINADO
+  11. Tomando en cuenta la fecha de hoy, verifique que fecha dará redondeando al año? Y
+  truncando al año? Escriba el resultado. Pruebe lo mismo suponiendo que sea el 1 de Julio del
+  año. Pruebe también el 12 de marzo.
+
+SELECT
+  SYSDATE FECHA_DE_HOY,
+  TO_DATE( EXTRACT(YEAR FROM SYSDATE), 'YYYY' ) REDONDEANDO_ANHO,
+  TRUNC( EXTRACT(YEAR FROM SYSDATE), 'YYYY' ) TRUNCANDO_ANHO,
+  TRUNC( TO_DATE('22-AUG-03'), 'YEAR' )
+FROM
+  DUAL
+
+=============================================================================================
+
+12. Imprima su edad en años y meses. Ejemplo: Si nació el 23/abril/1972, tendría 43 años y 3
+meses a la fecha.
+
+SELECT
+  TRUNC((SYSDATE - TO_DATE( '1996-13-01', 'YYYY-DD-MM' ))/365) años,
+  TRUNC((((SYSDATE - TO_DATE( '1996-13-01', 'YYYY-DD-MM' ))/365)-TRUNC((SYSDATE - TO_DATE( '1996-13-01', 'YYYY-DD-MM' ))/365))*12) meses
+FROM
+  DUAL
+
+
+  ===================================================================================================
+
+14. Liste ID y NOMBRE de todos los artículos que no están incluidos en ninguna VENTA. Debe
+utilizar necesariamente la sentencia MINUS.
+
+SELECT ID, NOMBRE FROM B_ARTICULOS
+WHERE ID
+IN
+(
+  SELECT
+    ID
+  FROM
+    B_ARTICULOS
+MINUS
+  SELECT
+    ID_ARTICULO
+  FROM
+    B_DETALLE_VENTAS
+)
+
+
+
+
+
+
+

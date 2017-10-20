@@ -1,0 +1,310 @@
+ 1. El salario de cada empleado está dado por su posición, y la asignación de la categoría
+vigente en dicha posición. Tanto la posición como la categoría vigente tienen la fecha fin
+nula – Un solo salario está vigente en un momento dado). Tomando como base la lista de
+empleados, verifique cuál es el salario máximo, el mínimo y el promedio. Formatee la
+salida para que se muestren los puntos de mil.
+
+SELECT
+  REPLACE( TO_CHAR( MAX(ASIGNACION), '999,999,999' ), ',', '.') MAXIMO,
+  REPLACE( TO_CHAR( MIN(ASIGNACION), '999,999,999' ), ',', '.') MINIMO,
+  REPLACE( TO_CHAR( ROUND( AVG(ASIGNACION) ), '999,999,999' ), ',', '.') PROMEDIO
+FROM
+  B_PLANILLA
+JOIN
+  B_EMPLEADOS
+ON
+  B_PLANILLA.CEDULA = B_EMPLEADOS.CEDULA
+JOIN
+  B_POSICION_ACTUAL
+ON
+  B_EMPLEADOS.CEDULA = B_POSICION_ACTUAL.CEDULA
+JOIN
+  B_CATEGORIAS_SALARIALES
+ON
+  B_POSICION_ACTUAL.COD_CATEGORIA = B_CATEGORIAS_SALARIALES.COD_CATEGORIA
+WHERE
+  B_POSICION_ACTUAL.FECHA_FIN IS NULL
+AND
+  B_CATEGORIAS_SALARIALES.FECHA_FIN IS NULL
+  ==================================================================================================================
+
+2. Basado en la consulta anterior, determine la mayor y menor asignación en cada área. Su
+consulta tendrá: Nombre de área, Asignación Máxima, Asignación Mínima
+
+SELECT
+  A.NOMBRE_AREA AREA,
+  MAX(CS.ASIGNACION) ASIGNACION_MAX,
+    MIN(CS.ASIGNACION) ASIGNACION_MIN
+FROM
+  B_AREAS A
+INNER JOIN
+  B_POSICION_ACTUAL PA ON PA.ID_AREA = A.ID
+INNER JOIN
+  B_EMPLEADOS E ON E.CEDULA = PA.CEDULA
+INNER JOIN
+  B_CATEGORIAS_SALARIALES CS ON CS.COD_CATEGORIA = PA.COD_CATEGORIA
+      WHERE
+        PA.FECHA_FIN IS NULL
+      AND
+        CS.FECHA_FIN IS NULL
+GROUP BY
+  A.NOMBRE_AREA
+ORDER BY 1;
+
+
+===========================================================================================================================
+3. Determine el nombre y apellido, nombre de categoría, asignación y área del empleado (o
+empleados) que tienen la máxima asignación vigente.
+
+SELECT
+  E.NOMBRE,
+  E.APELLIDO,
+  CA.NOMBRE_CAT,
+  CA.ASIGNACION,
+  A.NOMBRE_AREA
+FROM
+  B_EMPLEADOS E
+JOIN
+  B_POSICION_ACTUAL PA
+  ON
+    PA.CEDULA = E.CEDULA
+JOIN
+  B_CATEGORIAS_SALARIALES CA
+  ON
+    CA.COD_CATEGORIA = PA.COD_CATEGORIA
+LEFT JOIN
+  B_AREAS A
+  ON
+    A.ID = PA.ID_AREA
+WHERE
+  CA.ASIGNACION =
+  (
+
+    SELECT
+      MAX( B_CATEGORIAS_SALARIALES.ASIGNACION )
+    FROM
+      B_AREAS
+    JOIN
+      B_POSICION_ACTUAL ON B_POSICION_ACTUAL.ID_AREA = B_AREAS.ID
+    JOIN
+      B_CATEGORIAS_SALARIALES ON B_CATEGORIAS_SALARIALES.COD_CATEGORIA = B_POSICION_ACTUAL.COD_CATEGORIA
+    WHERE
+      B_AREAS.ID = A.ID
+    AND
+      B_CATEGORIAS_SALARIALES.FECHA_FIN IS NULL
+    AND
+      B_POSICION_ACTUAL.FECHA_FIN IS NULL
+  )
+ORDER BY
+  NOMBRE_AREA ASC,
+  ASIGNACION DESC
+============================================================================================================
+4. Determine el nombre y apellido, nombre de categoría, asignación y área del empleado (o
+empleados) que tienen una asignación INFERIOR al promedio. Ordene por monto de
+salario en forma DESCENDENTE.
+
+SELECT
+  E.NOMBRE,
+  E.APELLIDO,
+  CA.NOMBRE_CAT,
+  CA.ASIGNACION,
+  A.NOMBRE_AREA
+FROM
+  B_EMPLEADOS E
+JOIN
+  B_POSICION_ACTUAL PA
+  ON
+    PA.CEDULA = E.CEDULA
+JOIN
+  B_CATEGORIAS_SALARIALES CA
+  ON
+    CA.COD_CATEGORIA = PA.COD_CATEGORIA
+LEFT JOIN
+  B_AREAS A
+  ON
+    A.ID = PA.ID_AREA
+WHERE
+  CA.ASIGNACION <
+  (
+
+    SELECT
+      AVG( B_CATEGORIAS_SALARIALES.ASIGNACION )
+    FROM
+      B_AREAS
+    JOIN
+      B_POSICION_ACTUAL ON B_POSICION_ACTUAL.ID_AREA = B_AREAS.ID
+    JOIN
+      B_CATEGORIAS_SALARIALES ON B_CATEGORIAS_SALARIALES.COD_CATEGORIA = B_POSICION_ACTUAL.COD_CATEGORIA
+    WHERE
+      B_AREAS.ID = A.ID
+    AND
+      B_CATEGORIAS_SALARIALES.FECHA_FIN IS NULL
+    AND
+      B_POSICION_ACTUAL.FECHA_FIN IS NULL
+  )
+ORDER BY
+  NOMBRE_AREA ASC,
+  ASIGNACION DESC
+
+================================================================================================================
+
+5. Se necesita saber la cantidad de clientes que hay por cada localidad (Tenga en cuenta en la
+tabla B_PERSONAS sólo aquellas que son clientes). Liste el id, la descripción de la
+localidad y la cantidad de clientes. Asegúrese que se listen también las localidades que
+NO tienen clientes
+
+SELECT
+  L.ID,
+  L.NOMBRE,
+  COUNT( P.ID ) CANTIDAD_PERSONAS
+FROM
+  B_LOCALIDAD L
+LEFT JOIN
+  B_PERSONAS P
+  ON
+    P.ID_LOCALIDAD = L.ID
+WHERE
+  P.ES_CLIENTE = 'S'
+GROUP BY
+  L.ID, L.NOMBRE
+
+=================================================================================================================
+
+6. Liste el volumen (cantidad) y monto de compras y ventas que se hicieron por cada artículo
+durante el año 2011. Debe listar también los artículos que no tuvieron movimiento. Muestre
+ID, ARTICULO NOMBRE ARTICULO CANT.COMPRAS MONTO COMPRAS CANT VENTAS
+MONTO_VENTAS
+
+SELECT
+  A.ID,
+  A.NOMBRE,
+  SUM( C.CANTIDAD ) CANTIDAD_COMPRAS,
+  SUM( C.PRECIO_COMPRA ) MONTO_COMPRAS,
+  SUM( V.CANTIDAD ) CANTIDAD_VENTAS,
+  SUM( V.PRECIO ) MONTO_VENTAS
+FROM
+  B_ARTICULOS A
+RIGHT JOIN
+  B_DETALLE_VENTAS V
+  ON
+    V.ID_ARTICULO = A.ID
+JOIN
+  B_VENTAS
+  ON
+    B_VENTAS.ID = V.ID_VENTA
+RIGHT JOIN
+  B_DETALLE_COMPRAS C
+  ON
+    C.ID_ARTICULO = A.ID
+JOIN
+  B_COMPRAS
+  ON
+    B_COMPRAS.ID = C.ID_COMPRA
+WHERE
+  EXTRACT(YEAR FROM B_VENTAS.FECHA) = '2011'
+AND
+  EXTRACT(YEAR FROM B_COMPRAS.FECHA) = '2011'
+GROUP BY
+  A.ID, A.NOMBRE
+
+================================================================================================================
+
+7. Para tener una idea de movimientos, se desea conocer el volumen (cantidad) de ventas por
+mes que se hicieron por cada artículo durante el año 2012. Debe listar también los artículos
+que no tuvieron movimiento. La consulta debe lucir así:
+
+SELECT
+    A.NOMBRE NOMBRE_ARTICULO,
+    SUM( DV.CANTIDAD ),
+    CASE
+      EXTRACT( MONTH FROM V.FECHA )
+        WHEN 1 THEN SUM( DV.CANTIDAD )
+        ELSE 0
+    END ENERO,
+    CASE
+      EXTRACT( MONTH FROM V.FECHA )
+        WHEN 2 THEN SUM( DV.CANTIDAD )
+        ELSE 0
+    END FEBRERO,
+    CASE
+      EXTRACT( MONTH FROM V.FECHA )
+        WHEN 3 THEN SUM( DV.CANTIDAD )
+        ELSE 0
+    END MARZO,
+    CASE
+      EXTRACT( MONTH FROM V.FECHA )
+        WHEN 4 THEN SUM( DV.CANTIDAD )
+        ELSE 0
+    END ABRIL,
+    CASE
+      EXTRACT( MONTH FROM V.FECHA )
+        WHEN 5 THEN SUM( DV.CANTIDAD )
+        ELSE 0
+    END MAYO,
+    CASE
+      EXTRACT( MONTH FROM V.FECHA )
+        WHEN 6 THEN SUM( DV.CANTIDAD )
+        ELSE 0
+    END JUNIO,
+    CASE
+      EXTRACT( MONTH FROM V.FECHA )
+        WHEN 7 THEN SUM( DV.CANTIDAD )
+        ELSE 0
+    END JULIO,
+    CASE
+      EXTRACT( MONTH FROM V.FECHA )
+        WHEN 8 THEN SUM( DV.CANTIDAD )
+        ELSE 0
+    END AGOSTO,
+    CASE
+      EXTRACT( MONTH FROM V.FECHA )
+        WHEN 9 THEN SUM( DV.CANTIDAD )
+        ELSE 0
+    END SEPTIEMBRE,
+    CASE
+      EXTRACT( MONTH FROM V.FECHA )
+        WHEN 10 THEN SUM( DV.CANTIDAD )
+        ELSE 0
+    END OCTUBRE,
+    CASE
+      EXTRACT( MONTH FROM V.FECHA )
+        WHEN 11 THEN SUM( DV.CANTIDAD )
+        ELSE 0
+    END NOVIEMBRE,
+    CASE
+      EXTRACT( MONTH FROM V.FECHA )
+        WHEN 12 THEN SUM( DV.CANTIDAD )
+        ELSE 0
+    END DICIEMBRE
+FROM
+  B_ARTICULOS A
+JOIN
+  B_DETALLE_VENTAS DV
+  ON
+    DV.ID_ARTICULO = A.ID
+JOIN
+  B_VENTAS V
+  ON
+    V.ID = DV.ID_VENTA
+WHERE
+  EXTRACT(YEAR FROM V.FECHA) = '2011'
+GROUP BY
+  A.NOMBRE,
+  V.FECHA
+
+=====================================================================================================================================
+8. Se necesita la cantidad de funcionarios por área. Ordene en forma jerárquica e incluya
+también la cantidad de funcionarios de las áreas subordinadas de la siguiente manera:
+
+
+
+
+
+
+
+
+
+
+
+
+
