@@ -1,0 +1,76 @@
+-sudo apt-get install samba
+-smbpasswd -a SomeUserName
+(them set password for user)
+-sudo nano /etc/samba/smb.conf
+
+(on end of file set new conf for folder)
+=============================
+[FOLDERNAME]
+path = FOLDERPATH/FOLDERNAME
+available = yes
+valid users = SomeUserName
+read only = no
+browsable = yes
+public = yes
+writable = yes
+==============================
+
+-sudo service smbd restart
+
+
+(ACCESS FROM WINDOWS)
+\\192.168.0.2\FOLERNAME
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-sudo apt-get install cifs-utils
+
+-sudo apt-get install samba
+
+-smbpasswd -a yourUser
+
+(set password)
+========================
+
+-sudo nano /etc/samba/smb.conf
+
+(LAST LINE OF FILE)
+========================
+
+[<folder_name>] 
+path = <path>/<folder_name> 
+available = yes 
+valid users = <yourUser>
+read only = no 
+browsable = yes 
+public = yes
+writable = yes
+
+---------------------------------------------------
+-sudo service smbd restart
+
+(use)
+=================
+
+\\IP-ADDRESS\SHARE-NAME

@@ -1,0 +1,2 @@
+-- mkdir /media/someName
+--mount /dev/sdSomeDevice /media/someName

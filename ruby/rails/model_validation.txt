@@ -1,0 +1,52 @@
+validates :razon_social, 
+	length:
+	{ 
+		maximum: 60 ,
+    	too_long: "Solo son permitidos %{count} caracteres"
+    },
+    presence: true,
+    uniqueness: true
+	
+	validates :cedula, 
+	length:
+	{ 
+		maximum:  10,
+    	too_long: "Solo son permitidos %{count} caracteres"
+    },
+    numericality: { only_integer: true },
+    uniqueness: true,
+    allow_blank: true
+
+	validates :ruc, 
+	length:
+	{
+	 	maximum:  10,
+    	too_long: "Solo son permitidos %{count} caracteres"
+    },
+    allow_blank: true
+
+	validates :direccion, 
+	length:
+	{ 
+		maximum:  60, 
+    	too_long: "Solo son permitidos %{count} caracteres"
+    },
+    allow_blank: true
+
+	validates :telefono, 
+	length:
+	{
+		maximum:  10,
+    	too_long: "Solo son permitidos %{count} caracteres"
+    },
+    numericality: { only_integer: true },
+    allow_blank: true
+
+	validates :celular, 
+	length:
+	{ 
+		maximum:  10, 
+    	too_long: "Solo son permitidos %{count} caracteres"
+    },
+    numericality: { only_integer: true },
+    allow_blank: true

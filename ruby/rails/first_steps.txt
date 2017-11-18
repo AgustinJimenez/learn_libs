@@ -1,0 +1,18 @@
+-UBUNTU: https://gorails.com/setup/ubuntu/16.04
+-WINDOWS: https://medium.com/ruby-on-rails-web-application-development/how-to-install-rubyonrails-on-windows-7-8-10-complete-tutorial-2017-fc95720ee059
+
+-rails new nameApp -d mysql
+
+-rails s
+
+-rails g model cliente razon_social:string{60} cedula:string{12} ruc:string{12}  direccion:string{60} telefono:string{12} categoria:references
+
+-rails g scaffold nameEtity attribute1:string{60} attribute2:type{length}
+
+-rails db:migrate o rake db:migrate
+
+-rails g controller nameController index show create edit update destroy
+
+-INSTALA LAS GEMAS REQUERIDAS EN LAS FUENTES
+
+   bundle install

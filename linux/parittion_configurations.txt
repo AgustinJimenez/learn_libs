@@ -1,0 +1,4 @@
+- /boot      primary ext4  1GB
+-/swap   logic RAMX2
+-/          logic ext4
+-/home logic ext4

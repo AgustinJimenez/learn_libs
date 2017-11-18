@@ -1,0 +1,3 @@
+history | grep someting
+
+https://www.howtogeek.com/howto/ubuntu/how-to-display-a-list-of-recent-commands-in-ubuntu-linux/

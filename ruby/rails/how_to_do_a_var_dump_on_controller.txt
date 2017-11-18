@@ -1,0 +1,1 @@
+render plain: anyVariable.inspect / params.inspect

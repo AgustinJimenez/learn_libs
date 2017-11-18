@@ -1,0 +1,14 @@
+
+# return a collection with all users
+users = User.all
+
+
+# return the first user
+user = User.first
+
+# return the first user named David
+david = User.find_by(name: 'David')
+
+
+# find all users named David who are Code Artists and sort by created_at in reverse chronological order
+users = User.where(name: 'David', occupation: 'Code Artist').order(created_at: :desc)

@@ -1,0 +1,22 @@
+-Install an X ming on windows and run
+-excecute " export DISPLAY=:0 "
+-Launch an Application
+
+
+===
+FULL
+
+-Download and Install “VcXsrv Windows X Server" on your Windows 10.
+https://sourceforge.net/projects/vcxsrv/
+
+==Open Display Settings → Select 'one large window' and leave other settings as default → Finish the configuration.
+
+==Press ‘Start button’ and Search for 'Bash' or simply open Command Prompt and type 'bash' command.
+
+==Install ubuntu-desktop, unity, and ccsm. Then, export the display and open ccsm as shown below:
+
+sudo aptitude install ubuntu-desktop unity compizconfig-settings-manager
+export display=localhost:0
+ccsm
+
+https://thehackernews.com/2016/07/ubuntu-gui-windows-10.html

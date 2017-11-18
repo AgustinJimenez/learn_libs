@@ -1,0 +1,21 @@
+download ubuntu container
+===
+docker pull ubuntu
+
+run ubuntu container
+===
+docker run -it ubuntu
+
+update ubuntu dependencies
+===
+apt-get update
+
+list running containers
+===
+docker ps
+
+
+commit image
+===
+-with docker ps check witch one is your container id, then excecute 
+docker commit [CONTAINER_ID] [new_container_name] 

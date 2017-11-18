@@ -1,0 +1,3 @@
+search procees like:
+-ps aux | grep sometingLike OR -sudo kill -9 processnumber
+-sudo kill numberProgramId

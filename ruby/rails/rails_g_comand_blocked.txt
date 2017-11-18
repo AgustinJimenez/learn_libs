@@ -1,0 +1,4 @@
+-buscar algun proceso de pring server
+     ps aux | grep spring
+-matar dicho proceso
+    sudo kill -9 procesNumber

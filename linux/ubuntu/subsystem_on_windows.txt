@@ -1,0 +1,19 @@
+FORGOT PASSWORD
+===
+
+
+    Run bashand make a note of your Linux username (this need not match your Windows username), see How can I find out my user name?
+
+    In Windows admin command prompt (Super+X, A) change the default user to root:
+
+    lxrun /setdefaultuser root
+
+    Now Bash on Ubuntu on Windows logs you in as root without asking password
+
+    Use passwd command in Bash to change the user password (the user whose password you want to reset):
+
+    passwd your_username
+
+    Change the default user back to your normal user in Windows command prompt
+
+    lxrun /setdefaultuser your_username
