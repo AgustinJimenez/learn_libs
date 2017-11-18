@@ -5,6 +5,17 @@ import (
 	"strconv"
 )
 
+//structs
+type User struct {
+	name      string
+	last_name string
+	age       int
+}
+
+func (this *User) full_name() string {
+	return this.name + " " + this.last_name
+}
+
 func main() {
 
 	fmt.Println("hello world \n=======================================================================================\n\n\n")
@@ -71,7 +82,6 @@ func main() {
 	fmt.Println(other_slice)
 
 	//make and append
-
 	any_slice2 := make([]string, 0, 5)
 	any_slice2 = append(any_slice2, "here")
 	any_slice2 = append(any_slice2, "here 1")
@@ -79,12 +89,45 @@ func main() {
 	fmt.Println("actual length for elements, max capacity, slice-->", len(any_slice2), cap(any_slice2), any_slice2)
 
 	//copy
-
 	any_slice3 := []int{1, 2, 4, 5}
-
 	any_copy := make([]int, 1, 4)
 	copy(any_copy, any_slice3)
 	fmt.Println("copy, slice=====>", any_copy, any_slice3)
+
+	//pointers
+	var any_pointer *int
+	random_value := 1250
+	any_pointer = &random_value
+	fmt.Printf("random_value=%d, any_pointer(dir)=%d, any_pointer(value)=%d", random_value, any_pointer, *any_pointer)
+
+	//structs
+	new_user := User{name: "Agustin", last_name: "Jimenez", age: 21}
+	other_user := User{"John", "Doe", 350}
+	other_user.age = 35
+	pointer_user := new(User)
+	pointer_user.name = "Johnp"
+	fmt.Println("\n\n\nStruct User=====>", new_user, " new_user_full_name==>"+new_user.full_name(), other_user, "pointer_user(dir)", pointer_user)
+
+	//annonymous fields
+	type Human struct {
+		name      string
+		last_name string
+		age       int
+	}
+	type Dog struct {
+		name string
+	}
+	type Tutor struct {
+		Human
+		Dog
+	}
+	new_tutor := Tutor{Human{"John", "Doe", 24}, Dog{"Doggy"}}
+	fmt.Println("\n\n\nStruct Tutor=====>", new_tutor)
+
+
+	
+
+
 
 	fmt.Println("\n\n\n=======================================================================================")
 
