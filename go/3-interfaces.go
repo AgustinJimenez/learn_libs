@@ -13,9 +13,9 @@ type User interface {
 func auth(this User) string {
 
 	if this.Permissions() > 5 {
-		return "is admin"
+		return this.Name() + " is admin"
 	} else if this.Permissions() <= 6 {
-		return "is editor"
+		return this.Name() + " is editor"
 	} else {
 		return "invalid op"
 	}
@@ -43,9 +43,10 @@ func (this Editor) Permissions() int {
 
 func main() {
 
-	new_admin := Admin{"John"}
-	new_editor := Editor{Admin{"Johnny"}}
+	users := []User{Admin{"John"}, Editor{Admin{"Johnny"}}}
 
-	fmt.Println(new_admin.Name(), auth(new_admin), new_editor.Name(), auth(new_editor))
+	for index, user := range users {
+		fmt.Println(auth(user))
+	}
 
 }
