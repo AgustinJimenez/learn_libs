@@ -16,7 +16,7 @@ https://sourceforge.net/projects/vcxsrv/
 ==Install ubuntu-desktop, unity, and ccsm. Then, export the display and open ccsm as shown below:
 
 sudo aptitude install ubuntu-desktop unity compizconfig-settings-manager
-export display=localhost:0
+export DISPLAY=localhost:0
 ccsm
 
 https://thehackernews.com/2016/07/ubuntu-gui-windows-10.html

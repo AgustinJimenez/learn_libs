@@ -1,0 +1,1 @@
+docker rm ID_or_Name ID_or_Name

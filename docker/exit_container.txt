@@ -1,0 +1,5 @@
+press ctr + p + q
+
+
+and then can stop container
+docker stop [CONTAINER_ID]
