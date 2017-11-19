@@ -1,0 +1,2 @@
+C:\Users\[YOUR_USERNAME]\AppData\Local\lxss
+example: C:\Users\agus_\AppData\Local\lxss

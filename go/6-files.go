@@ -26,6 +26,11 @@ func read_random_file(file_path string){
 }
 
 func read_random_file_line_by_line(file_path string){
+	defer func(){
+		file_data.Close()
+		fmt.Println("DEFER ALWAYS CLOSE FILE")
+	}()
+
 	file_data, err := os.Open(file_path)
 	if err!= nil{
 		fmt.Println("Hubo un error")
@@ -47,7 +52,7 @@ func main() {
 		fmt.Println("\n======================================>", option)
 		_, err := fmt.Scanf("%d", &option)
 		if err != nil {
-			//panic(err)
+			panic(err)
 		}else{
 			fmt.Println("\n======================================")
 			read_file("./hello.txt", option )

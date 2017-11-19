@@ -18,5 +18,9 @@ https://sourceforge.net/projects/vcxsrv/
 sudo aptitude install ubuntu-desktop unity compizconfig-settings-manager
 export DISPLAY=localhost:0
 ccsm
+==here you can config all details
+
+==to launch gui
+compiz
 
 https://thehackernews.com/2016/07/ubuntu-gui-windows-10.html
