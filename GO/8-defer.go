@@ -4,29 +4,38 @@ import (
 )
 func main() {
 	var v int
+
 	fmt.Println( "Select value" )
-	fmt.Scanf("%d", v);
-	test(v)
+	fmt.Scanf("%d", v)
+	if test(v){
+		fmt.Println("return true\n\n")
+	}else{
+		fmt.Println("return false\n\n")
+	}
+
+
 }
 
-func test(value int){
+func test(value int) bool{
 
-	if value >= 1 {
-		fmt.Println( "1" )
+	defer func(){
+		fmt.Println("DEFER HERE before return always!!!")
+	}()
+
+	fmt.Println( " begin function \n" )
+
+	switch value{
+	case 1:
+		fmt.Println( "is 1" )
+		return true
+	case 2:
+		fmt.Println( "is 2" )
+		return true
+	default:
+		fmt.Println( "none" )
+		return false
 	}
 
-	if value >= 2 {
-		fmt.Println( "2" )
-	}
-
-	if value >= 3 {
-		fmt.Println( "3" )
-	}
-
-	if value >= 4 {
-		fmt.Println( "3" )
-	}
-
-	
-
+	fmt.Println( " end function \n\n" )
+	return false
 }
