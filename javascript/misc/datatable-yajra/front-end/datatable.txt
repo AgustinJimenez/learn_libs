@@ -1,9 +1,7 @@
 <script type="text/javascript" charset="utf-8">
 	var table = $('.data-table').DataTable
 	({
-      	dom: "<'row'<'col-xs-12'<'col-xs-6'l><'col-xs-6'p>>r>"+
-        "<'row'<'col-xs-12't>>"+
-        "<'row'<'col-xs-12'<'col-xs-6'i><'col-xs-6'p>>>",
+      	dom: config.datatable.tool_bar,
         "deferRender": true,
         processing: true,
         serverSide: true,

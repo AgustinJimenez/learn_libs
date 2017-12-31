@@ -23,7 +23,10 @@
                 { data: 'fecha', name: 'fecha', orderable: true, searchable: false},
                 { data: 'tipo', name: 'tipo', orderable: true, searchable: false}
             ],
-            default_datas_count: 25
+            default_datas_count: 25,
+            tool_bar:"<'row'<'col-xs-12'<'col-xs-6'l><'col-xs-6'p>>r>"+
+                        "<'row'<'col-xs-12't>>"+
+                        "<'row'<'col-xs-12'<'col-xs-6'i><'col-xs-6'p>>>"
 		}//end datatable
 	}
 
