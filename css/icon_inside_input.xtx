@@ -1,0 +1,35 @@
+ADD STYLES
+===========
+
+.inner-addon {
+   position: relative;
+}
+
+.inner-addon .glyphicon {
+   color:#007f4f ;
+   position: absolute;
+   padding: 10px;
+   cursor: pointer;
+}
+
+.left-addon .glyphicon  { left:  0px;}
+.right-addon .glyphicon { right: 0px;}
+
+.left-addon input  { padding-left:  30px; }
+.right-addon input { padding-right: 30px; }
+
+USE
+===
+<div class="inner-addon left-addon">
+    <i class="glyphicon glyphicon-user"></i>
+    <input type="text" class="form-control" />
+</div>
+
+
+
+
+<div class="form-group has-feedback">
+    <label class="control-label">Username</label>
+    <input type="text" class="form-control" placeholder="Username" />
+    <i class="glyphicon glyphicon-user form-control-feedback"></i>
+</div>

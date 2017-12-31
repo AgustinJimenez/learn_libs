@@ -1,0 +1,21 @@
+Need to update your version of Node.js? Here's how you can upgrade or downgrade from the command line using NPM.
+
+Upgrading to the latest stable version
+
+This will update you to the latest available stable version:
+
+sudo npm cache clean -f
+sudo npm install -g n
+sudo n stable
+Upgrading to the latest LTS version
+
+Node also offers a long-term support (LTS) version. If you need that version (or any other), simply specify the version number you want:
+
+sudo npm cache clean -f
+sudo npm install -g n
+sudo n 4.4.2
+Checking your Node version
+
+To see which version of Node is currently installed, simply run:
+
+node -v

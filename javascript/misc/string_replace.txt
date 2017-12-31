@@ -1,0 +1,45 @@
+Regular Expression Based Implementation
+
+String.prototype.replaceAll = function(search, replacement) {
+var target = this;
+return target.replace(new RegExp(search, 'g'), replacement);
+};
+Split and Join (Functional) Implementation
+
+String.prototype.replaceAll = function(search, replacement)
+{
+var target = this;
+return target.split(search).join(replacement);
+};
+
+function escapeRegExp(str) {
+return str.replace(/[.*+?^${}()|[]\]/g, "\$&"); // $& means the whole matched string
+}
+
+str.replace(/foo/g, "bar")
+This will replace all occurrences of foo with bar in the string str. If you just have a string, you can convert it to a RegExp object like this:
+
+var pattern = "foobar",
+re = new RegExp(pattern, "g");
+
+str.replace(/\n/g, '<br />');
+function replace_this(target, search, replacement)
+{
+return String(target).split(search).join(replacement);
+};
+
+Number.prototype.formatMoney = function(c, d, t)
+{
+//.formatMoney(2, ',', '.')
+var n = this,
+c = isNaN(c = Math.abs(c)) ? 2 : c,
+d = d == undefined ? "." : d,
+t = t == undefined ? "," : t,
+s = n < 0 ? "-" : "",
+i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(c))),
+j = (j = i.length) > 3 ? j % 3 : 0;
+return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+};
+
+192.168.1.0/29
+201.217.5.45

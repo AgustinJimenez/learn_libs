@@ -1,0 +1,27 @@
+ON HTML: <select name="correccion" onchange="submit_correccion(<?=$id?>, this.value);">
+
+ON JAVASCRIPT: function submit_correccion(id, correccion)
+{
+//console.log("executing submit_correccion("+id+", "+correccion+")");
+$.post
+(
+"update_inscripcion_alumno_correccion.php",
+{
+inscl_id: id,
+correccion: correccion
+},
+function(data, status)
+{
+//console.log("data: "+data+" \nStatus: "+status);
+}
+);
+}
+
+ON PHP: <?php
+include ('../../_configuracion.php');
+$correccion = $_POST['correccion'];
+$inscl_id = $_POST['inscl_id'];
+
+$sql = "UPDATE inscripcion_clase SET correccion = {$correccion} WHERE inscl_id = {$inscl_id}";
+mysql_query($sql, $con) or die("Problemas en update_inscripcion_alumno_correccion:".mysql_error());
+//echo $sql

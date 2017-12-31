@@ -1,0 +1,130 @@
+COFFESCRIPT
+
+No Parentheses
+In general, we use parenthesis while declaring the function,
+calling it, and also to separate the code blocks to avoid ambiguity. 
+In CoffeeScript, there is no need to use parentheses, and while creating functions, 
+we use an arrow mark (->) instead of parentheses as shown below.
+
+	myfunction = -> alert "Hello"
+
+Still, we have to use parentheses in certain scenarios. While calling functions without parameters, 
+we will use parentheses. For example, if we have a function named my_function in CoffeeScript, 
+then we have to call it as shown below.
+
+	my_function()
+
+No Curly Braces
+In JavaScript, for the block codes such as functions, loops, and conditional statements, we use curly braces. 
+In CoffeeScript, there is no need to use curly braces. Instead, we have to maintain proper indentations (white spaces) 
+within the body. This is the feature which is inspired from the Python language.
+Following is an example of a function in CoffeeScript. Here you can observe that instead of curly braces, we have used 
+three whitespaces as indentation to separate the body of the function.
+
+myfunction = -> 
+   name = "John"
+   alert "Hello"+name
+
+Single-line Comments
+	# This is the single line comment in CoffeeScript
+Multiline Comments
+	###
+	These are the multi line comments in CoffeeScript
+	We can write as many number of lines as we want 
+	within the pair of triple hash tags.
+	###
+
+for student,i in ['Ram', 'Mohammed', 'John']
+   console.log "The name of the student with id "+i+" is: "+student 
+
+#Postfix for..in comprehension
+	console.log student for student in ['Ram', 'Mohammed', 'John']
+
+#postfix for..of comprehension
+	console.log key+"::"+value for key,value of { name: "Mohammed", age: 24, phone: 9848022338}
+
+
+
+# Comments are similar to Ruby and Python, using the hash symbol `#`
+
+###
+Block comments are like these, and they translate directly to '/ *'s and '* /'s
+for the resulting JavaScript code.
+
+You should understand most of JavaScript semantics
+before continuing.
+###
+
+# Assignment:
+number   = 42 #=> var number = 42;
+opposite = true #=> var opposite = true;
+
+# Conditions:
+number = -42 if opposite #=> if(opposite) { number = -42; }
+
+# Functions:
+square = (x) -> x * x #=> var square = function(x) { return x * x; }
+
+fill = (container, liquid = "coffee") ->
+  "Filling the #{container} with #{liquid}..."
+#=>var fill;
+#
+#fill = function(container, liquid) {
+#  if (liquid == null) {
+#    liquid = "coffee";
+#  }
+#  return "Filling the " + container + " with " + liquid + "...";
+#};
+
+# Ranges:
+list = [1..5] #=> var list = [1, 2, 3, 4, 5];
+
+# Objects:
+math =
+  root:   Math.sqrt
+  square: square
+  cube:   (x) -> x * square x
+#=> var math = {
+#    "root": Math.sqrt,
+#    "square": square,
+#    "cube": function(x) { return x * square(x); }
+#   };
+
+# Splats:
+race = (winner, runners...) ->
+  print winner, runners
+#=>race = function() {
+#    var runners, winner;
+#    winner = arguments[0], runners = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
+#    return print(winner, runners);
+#  };
+
+# Existence:
+alert "I knew it!" if elvis?
+#=> if(typeof elvis !== "undefined" && elvis !== null) { alert("I knew it!"); }
+
+# Array comprehensions:
+cubes = (math.cube num for num in list)
+#=>cubes = (function() {
+#     var _i, _len, _results;
+#     _results = [];
+#   for (_i = 0, _len = list.length; _i < _len; _i++) {
+#         num = list[_i];
+#         _results.push(math.cube(num));
+#     }
+#     return _results;
+# })();
+
+foods = ['broccoli', 'spinach', 'chocolate']
+eat food for food in foods when food isnt 'chocolate'
+#=>foods = ['broccoli', 'spinach', 'chocolate'];
+#
+#for (_k = 0, _len2 = foods.length; _k < _len2; _k++) {
+#  food = foods[_k];
+#  if (food !== 'chocolate') {
+#    eat(food);
+#  }
+#}
+
+
+https://www.tutorialspoint.com/coffeescript

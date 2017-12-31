@@ -1,0 +1,26 @@
+1-CREATE NEW LARAVEL PROYECT
+===
+composer create-project --prefer-dist laravel/laravel proyectName "5.4.*"
+
+2-SET DATABASE CREDENTIALS AT .ENV FILE
+===
+
+3-EXECUTE COMAND
+===
+composer require tcg/voyager
+
+4-ADD VOYAGER PROVIDER ON PROVIDERS ARRAY AT CONFIG/APP.PHP
+===
+
+TCG\Voyager\VoyagerServiceProvider::class,
+
+5-EXECUTE COMAND|
+===
+php artisan voyager:install --with-dummy
+
+6-GO TO ADMIN PAGE
+===
+http://localhost:8000/admin
+email: admin@admin.com
+password: password
+

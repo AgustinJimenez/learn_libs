@@ -1,0 +1,2 @@
+Problema Asgard: Carga los elementos de la vista pero no los estilos
+verificar que el controlador herede de clase AdminBaseController 

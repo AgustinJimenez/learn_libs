@@ -1,0 +1,13 @@
+DB::beginTransaction();
+try
+{
+	//yourqueries
+}
+catch (\Illuminate\Database\QueryException $e)
+{
+	DB::rollBack();
+	flash()->error('Ocurrio un error al intentar crear el registro: ' . $e.getMessage() );
+	return redirect()->back();
+}
+DB::commit();
+flash()->success('Registro creado satisfactoriamente');

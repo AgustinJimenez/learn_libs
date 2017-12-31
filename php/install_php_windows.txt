@@ -1,0 +1,5 @@
+-descargar
+-descomprimir en C:php
+-habilitar php.ini
+-habilitar extension php_pdo_mysql, php_openssl
+-agregar a las variables de entorno el path: C:\php\

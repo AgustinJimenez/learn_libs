@@ -1,0 +1,30 @@
+<script type="text/javascript" charset="utf-8">
+	
+	var config = 
+	{
+		datatable:
+		{
+			order: [[ 0, "desc" ]],
+			ajax_source: '{!! route('admin.avisos.aviso.index_ajax') !!}',
+			send_request: function (d) 
+            {
+                //d.tipo = $("#fecha_inicio").val()
+            },
+            data_source: function ( json ) 
+            {
+                //$("label[for=saldo_acumulado]").text('Saldo Acumulado hasta el '+json.fecha_inicio);
+                //$("input[name=saldo_acumulado]").val(json.saldo_acumulado);
+                return json.data;
+            },
+            columns: 
+            [
+                { data: 'titulo', name: 'titulo', orderable: true, searchable: false},
+                { data: 'firma', name: 'firma', orderable: true, searchable: false},
+                { data: 'fecha', name: 'fecha', orderable: true, searchable: false},
+                { data: 'tipo', name: 'tipo', orderable: true, searchable: false}
+            ],
+            default_datas_count: 25
+		}//end datatable
+	}
+
+</script>

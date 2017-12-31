@@ -1,0 +1,467 @@
+/
+1. Crear las tablas resultantes del Dise�o de la Base de Datos en Tercera Forma Normal. /
+
+/ Creamos la base de datos /
+
+CREATE DATABASE PRACTICA
+USE PRACTICA
+
+/ Creamos las tablas /
+
+CREATE TABLE Empresa
+(
+Cod_Empresa int identity NOT NULL,
+Nom_Empresa nvarchar(60),
+Domicilio_Empresa nvarchar(80),
+Nro_Empleados int,
+Tipo_Empresa nvarchar(15),
+Nom_Director nvarchar(60),
+Presup_Mant int,
+Vol_Negocio nvarchar(30),
+PRIMARY KEY (Cod_Empresa),
+CONSTRAINT CHK_Tipo_Empresa CHECK (Tipo_Empresa IN('Local', 'Nacional','Internacional') ),
+CONSTRAINT CHK_Vol_Negocio CHECK (Vol_Negocio IN ('Hasta 50', 'De 51 a 100','Mas de 100') )
+)
+
+CREATE TABLE Transporte
+(
+Cod_Transporte int identity unique NOT NULL,
+Cod_Empresa int FOREIGN KEY REFERENCES Empresa(Cod_Empresa),
+Marca nvarchar(60),
+Peso_Propio nvarchar(80),
+Potencia int,
+PRIMARY KEY (Cod_Transporte)
+)
+
+CREATE TABLE Empleado
+(
+Cod_Empleado int identity NOT NULL,
+Nom_Empleado nvarchar(60),
+Ape_Empleado nvarchar(60),
+Tipo_Carnet int,
+Cod_Empresa int NOT NULL,
+CONSTRAINT empresaID FOREIGN KEY (Cod_Empresa)
+REFERENCES Empresa(Cod_Empresa),
+PRIMARY KEY (Cod_Empleado)
+)
+
+CREATE TABLE Taller
+(
+Cod_Taller int identity NOT NULL,
+Dir_Taller nvarchar(60),
+Especialidad nvarchar(60),
+PRIMARY KEY (Cod_Taller)
+)
+
+CREATE TABLE Catalogo
+(
+Codigo int identity NOT NULL,
+Descripcion nvarchar(255),
+PRIMARY KEY (Codigo)
+)
+
+CREATE TABLE Carga
+(
+Desc_Carga nvarchar(80) NOT NULL unique,
+Valor_Gs nvarchar(60),
+Lugar_Proc nvarchar(60)
+PRIMARY KEY (Desc_Carga)
+)
+
+CREATE TABLE Mantenimiento
+(
+Cod_Operacion int identity NOT NULL,
+Cod_Taller int NOT NULL,
+CONSTRAINT taller_id FOREIGN KEY (Cod_Taller)
+REFERENCES Taller(Cod_Taller),
+Cod_Transporte int NOT NULL FOREIGN KEY REFERENCES Transporte(Cod_Transporte),
+Fecha_Ingreso date NOT NULL,
+Fecha_Salida date,
+PRIMARY KEY (Cod_Operacion)
+)
+
+CREATE TABLE Itinerario
+(
+Cod_Itinerario int identity NOT NULL,
+Punto_Partida nvarchar(150) NOT NULL,
+Punto_Destino nvarchar(150),
+Indice_Calidad int NOT NULL,
+PRIMARY KEY (Cod_itinerario),
+CONSTRAINT CHK_Indice_Calidad CHECK (Indice_Calidad>=1 and Indice_Calidad<=10 ))
+
+CREATE TABLE Categoria
+(
+Cod_Categoria int identity NOT NULL,
+Descripcion nvarchar(255),
+PRIMARY KEY (Cod_Categoria)
+)
+
+CREATE TABLE Transporta
+(
+Cod_Transporta int identity NOT NULL,
+Desc_Carga nvarchar(80) FOREIGN KEY REFERENCES Carga(Desc_Carga),
+Cod_Itinerario int NOT NULL FOREIGN KEY REFERENCES Itinerario(Cod_Itinerario),
+Cod_Transporte int NOT NULL FOREIGN KEY REFERENCES Transporte(Cod_Transporte),
+Fecha date,
+
+PRIMARY KEY (Cod_Transporta)
+)
+
+CREATE TABLE Opera
+(
+Cod_Opera int identity NOT NULL,
+Cod_Empleado int NOT NULL FOREIGN KEY REFERENCES Empleado(Cod_Empleado),
+Cod_Transporte int NOT NULL FOREIGN KEY REFERENCES Transporte(Cod_Transporte),
+Fecha date,
+CONSTRAINT PK_Cod_Opera PRIMARY KEY (Cod_Opera)
+)
+
+CREATE TABLE Contrata
+(
+Cod_Contrata int identity NOT NULL,
+Cod_Empresa int NOT NULL FOREIGN KEY REFERENCES Empresa(Cod_Empresa),
+Cod_Taller int NOT NULL FOREIGN KEY REFERENCES Taller(Cod_Taller),
+Monto int NOT NULL,
+CONSTRAINT PK_Cod_Contrata PRIMARY KEY (Cod_Contrata)
+)
+
+/
+2. Introducir en las tablas creadas los datos que se estimen necesarios para la resolucion de la pr�ctica, considerando que todos los apartados deben proporcionar resultados. /
+
+/ Cargamos los datos en las tablas /
+
+INSERT INTO PRACTICA.dbo.Itinerario (Punto_Partida, Punto_Destino, Indice_Calidad)
+VALUES ('Asuncion', 'Encarnacion', 5)
+
+INSERT INTO PRACTICA.dbo.Itinerario(Punto_Partida, Punto_Destino, Indice_Calidad)
+VALUES ('Encarnacion', 'Asuncion', 5)
+
+INSERT INTO PRACTICA.dbo.Itinerario(Punto_Partida, Punto_Destino, Indice_Calidad)
+VALUES ('Asuncion', 'Ciudad del Este', 4)
+
+INSERT INTO PRACTICA.dbo.Itinerario(Punto_Partida, Punto_Destino, Indice_Calidad)
+VALUES ('Ciudad del Este', 'Asuncion', 4)
+
+INSERT INTO PRACTICA.dbo.Itinerario(Punto_Partida, Punto_Destino, Indice_Calidad)
+VALUES ('Luque', 'San Lorenzo', 7)
+
+INSERT INTO PRACTICA.dbo.Itinerario(Punto_Partida, Punto_Destino, Indice_Calidad)
+VALUES ('Asuncion', 'Luque', 7)
+
+INSERT INTO Empresa (Nom_Empresa, Domicilio_Empresa, Nro_Empleados, Tipo_Empresa, Nom_Director, Presup_Mant, Vol_Negocio)
+VALUES ('Electric Art', 'San Vicente 1212', 656, 'Internacional', 'Juan Perez', 10000000, 'De 51 a 100');
+INSERT INTO Empresa (Nom_Empresa, Domicilio_Empresa, Nro_Empleados, Tipo_Empresa, Nom_Director, Presup_Mant, Vol_Negocio)
+VALUES ('Cafe ti', 'San Juaquin 1112', 123, 'Internacional', 'Sergio Diaz', 12000000, 'Mas de 100');
+INSERT INTO Empresa (Nom_Empresa, Domicilio_Empresa, Nro_Empleados, Tipo_Empresa, Nom_Director, Presup_Mant, Vol_Negocio)
+VALUES ('Tele Sport', 'Tres Bocas 1112', 234, 'Local', 'Ariel Canute', 20458743, 'De 51 a 100');
+INSERT INTO PRACTICA.dbo.Empresa (Nom_Empresa, Domicilio_Empresa, Nro_Empleados, Tipo_Empresa, Nom_Director, Presup_Mant, Vol_Negocio)
+VALUES ('NSA', 'Asuncion', 50, 'Nacional', 'Julia', 10000000, 'Mas de 100')
+INSERT INTO PRACTICA.dbo.Empresa (Nom_Empresa, Domicilio_Empresa, Nro_Empleados, Tipo_Empresa, Nom_Director, Presup_Mant, Vol_Negocio)
+VALUES ('RYSA', 'Fernando de la Mora', 36, 'Nacional', 'Pablo', 7000000, 'Hasta 50')
+INSERT INTO PRACTICA.dbo.Empresa (Nom_Empresa, Domicilio_Empresa, Nro_Empleados, Tipo_Empresa, Nom_Director, Presup_Mant, Vol_Negocio)
+VALUES ('MC&S', 'Asuncion', 47, 'Nacional', 'Gabriel', 15850000, 'Mas de 100')
+
+INSERT INTO Transporte (Cod_Empresa, Marca, Peso_Propio, Potencia)
+VALUES (1, 'Mecedes benz', 1252, 2484);
+
+INSERT INTO Transporte (Cod_Empresa, Marca, Peso_Propio, Potencia)
+VALUES (3, 'Toyota', 1233, 124);
+
+INSERT INTO Transporte (Cod_Empresa, Marca, Peso_Propio, Potencia)
+VALUES (3, 'Golf', 1113, 1249);
+
+INSERT INTO Transporte (Cod_Empresa, Marca, Peso_Propio, Potencia)
+VALUES (2, 'Vitz', 1300, 1000);
+
+INSERT INTO Carga
+(Desc_Carga, Valor_Gs, Lugar_Proc)
+VALUES
+('Electronicos', 150000, 'China')
+INSERT INTO Carga
+(Desc_Carga, Valor_Gs, Lugar_Proc)
+VALUES
+('Comestibles', 130000, 'Asuncion')
+INSERT INTO Carga
+(Desc_Carga, Valor_Gs, Lugar_Proc)
+VALUES
+('Herramientas', 150000, 'Korea')
+
+INSERT INTO Transporta (Desc_Carga, Cod_Itinerario, Cod_Transporte, Fecha)
+VALUES ('Electronicos', 1, 2, '12-05-2017');
+INSERT INTO Transporta (Desc_Carga, Cod_Itinerario, Cod_Transporte, Fecha)
+VALUES ('Comestibles', 1, 1, '12-06-2017');
+INSERT INTO Transporta (Desc_Carga, Cod_Itinerario, Cod_Transporte, Fecha)
+VALUES ('Herramientas', 2, 1, '12-06-2017');
+INSERT INTO Transporta (Desc_Carga, Cod_Itinerario, Cod_Transporte, Fecha)
+VALUES ('Comestibles', 3, 1, '12-06-2017');
+INSERT INTO Transporta (Desc_Carga, Cod_Itinerario, Cod_Transporte, Fecha)
+VALUES ('Comestibles', 3, 2, '12-06-2017');
+INSERT INTO Transporta (Desc_Carga, Cod_Itinerario, Cod_Transporte, Fecha)
+VALUES ('Electronicos', 3, 1, '12-06-2017');
+
+INSERT INTO PRACTICA.dbo.Contrata (Cod_Empresa, Cod_Taller, Monto)
+VALUES (1,1,500000)
+INSERT INTO PRACTICA.dbo.Contrata (Cod_Empresa, Cod_Taller, Monto)
+VALUES (1,2,800000)
+INSERT INTO PRACTICA.dbo.Contrata (Cod_Empresa, Cod_Taller, Monto)
+VALUES (3,2,100000)
+
+INSERT INTO Taller
+(Dir_Taller, Especialidad)
+VALUES
+('dir taller a', 'Circuitos Integrados' )
+
+INSERT INTO Taller
+(Dir_Taller, Especialidad)
+VALUES
+('dir taller b', 'Reparacion Vehicular' )
+
+INSERT INTO Taller
+(Dir_Taller, Especialidad)
+VALUES
+('dir taller c', 'Cableado Electrico' )
+
+INSERT INTO Contrata
+(Cod_Empresa, Cod_Taller, Monto)
+VALUES
+(1, 1, 4000000)
+
+INSERT INTO Contrata
+(Cod_Empresa, Cod_Taller, Monto)
+VALUES
+(1, 1, 3000000)
+
+INSERT INTO Contrata
+(Cod_Empresa, Cod_Taller, Monto)
+VALUES
+(1, 1, 5500000)
+
+INSERT INTO Contrata
+(Cod_Empresa, Cod_Taller, Monto)
+VALUES
+(1, 1, 120000)
+
+INSERT INTO Contrata
+(Cod_Empresa, Cod_Taller, Monto)
+VALUES
+(1, 1, 120000)
+
+INSERT INTO Contrata
+(Cod_Empresa, Cod_Taller, Monto)
+VALUES
+(1, 1, 120000)
+
+INSERT INTO Contrata
+(Cod_Empresa, Cod_Taller, Monto)
+VALUES
+(1, 1, 120000)
+
+INSERT INTO Contrata
+(Cod_Empresa, Cod_Taller, Monto)
+VALUES
+(1, 2, 400000)
+
+INSERT INTO Contrata
+(Cod_Empresa, Cod_Taller, Monto)
+VALUES
+(1, 3, 300000)
+
+INSERT INTO Contrata
+(Cod_Empresa, Cod_Taller, Monto)
+VALUES
+(2, 3, 200000)
+
+INSERT INTO Contrata
+(Cod_Empresa, Cod_Taller, Monto)
+VALUES
+(3, 1, 250000)
+
+INSERT INTO Mantenimiento
+(Cod_Taller, Cod_Transporte, Fecha_Ingreso, Fecha_Salida)
+VALUES
+(1, 1, '2017-12-02', '2017-12-04')
+
+INSERT INTO Mantenimiento
+(Cod_Taller, Cod_Transporte, Fecha_Ingreso, Fecha_Salida)
+VALUES
+(1, 1, '2017-12-01', '2017-12-03')
+
+INSERT INTO Mantenimiento
+(Cod_Taller, Cod_Transporte, Fecha_Ingreso, Fecha_Salida)
+VALUES
+(2, 2, '2017-12-01', '2017-12-02')
+
+INSERT INTO Mantenimiento
+(Cod_Taller, Cod_Transporte, Fecha_Ingreso, Fecha_Salida)
+VALUES
+(3, 3, '2017-11-27', '2017-12-01')
+
+INSERT INTO Empleado
+(Nom_Empleado, Ape_Empleado, Tipo_Carnet, Cod_Empresa)
+VALUES
+('Jorge', 'Ramirez', 1, 1)
+INSERT INTO Empleado
+(Nom_Empleado, Ape_Empleado, Tipo_Carnet, Cod_Empresa)
+VALUES
+('Hugo', 'Gomez', 1, 1)
+INSERT INTO Empleado
+(Nom_Empleado, Ape_Empleado, Tipo_Carnet, Cod_Empresa)
+VALUES
+('Javier', 'Gonzales', 1, 1)
+INSERT INTO Empleado
+(Nom_Empleado, Ape_Empleado, Tipo_Carnet, Cod_Empresa)
+VALUES
+('Hernesto', 'Medina', 1, 2)
+INSERT INTO Empleado
+(Nom_Empleado, Ape_Empleado, Tipo_Carnet, Cod_Empresa)
+VALUES
+('Facundo', 'Talavera', 1, 2)
+INSERT INTO Empleado
+(Nom_Empleado, Ape_Empleado, Tipo_Carnet, Cod_Empresa)
+VALUES
+('Gerardo', 'Cabanias', 1, 3)
+
+/
+3. Obtener el origen de los itinerarios cuyo punto de destino es "Encarnaci�n". /
+
+SELECT *
+FROM Itinerario
+
+SELECT Punto_Partida
+FROM Itinerario
+WHERE Punto_Destino = 'Encarnacion'
+
+/
+4. Obtener los nombres de las empresas y los c�digos de los talleres contratados. /
+
+SELECT FROM Empresa;
+SELECT FROM Contrata;
+
+SELECT Empresa.Nom_Empresa, Contrata.Cod_Taller
+FROM Empresa
+INNER JOIN Contrata
+ON Empresa.Cod_Empresa = Contrata.Cod_Empresa
+
+/
+5. Obtener aquellos veh�culos que, habiendo realizado alg�n itinerario, todav�a no haya pasado por ning�n taller para operaciones de mantenimiento. /
+
+SELECT FROM Transporte
+SELECT FROM Transporta
+SELECT * FROM Mantenimiento
+
+SELECT * FROM Transporte
+LEFT JOIN Mantenimiento
+ON Mantenimiento.Cod_Transporte = Transporte.Cod_Transporte
+LEFT JOIN Transporta
+ON Transporta.Cod_Transporte = Transporte.Cod_Transporte
+
+SELECT Transporte.* FROM Transporte
+LEFT JOIN Mantenimiento
+ON Mantenimiento.Cod_Transporte = Transporte.Cod_Transporte
+LEFT JOIN Transporta
+ON Transporta.Cod_Transporte = Transporte.Cod_Transporte
+WHERE Cod_Operacion IS NULL
+AND Cod_Itinerario IS NULL
+
+/
+6. Obtener para cada empresa, el n�mero de conductores/pilotos que tiene (indicando empresa y n�mero). /
+
+SELECT FROM Empresa;
+SELECT FROM Empleado;
+SELECT Empresa.Nom_Empresa, COUNT( DISTINCT Empleado.Cod_Empleado ) as Conductores
+FROM Empresa
+LEFT JOIN Empleado ON Empleado.Cod_Empresa = Empresa.Cod_Empresa
+GROUP BY Empresa.Nom_Empresa
+ORDER BY Conductores DESC
+
+/
+7. Obtener la empresa que m�s conductores/pilotos tiene. /
+
+SELECT FROM Empresa;
+SELECT FROM Empleado;
+
+SELECT Empresa.Nom_Empresa, COUNT( DISTINCT Empleado.Cod_Empleado ) as Conductores
+FROM Empresa
+LEFT JOIN Empleado ON Empleado.Cod_Empresa = Empresa.Cod_Empresa
+GROUP BY Empresa.Nom_Empresa
+ORDER BY Conductores DESC
+
+SELECT TOP 1 Empresa.Nom_Empresa, COUNT( DISTINCT Empleado.Cod_Empleado ) as Conductores
+FROM Empresa
+LEFT JOIN Empleado ON Empleado.Cod_Empresa = Empresa.Cod_Empresa
+GROUP BY Empresa.Nom_Empresa
+ORDER BY Conductores DESC
+
+/
+8. Obtener el veh�culo en el que m�s se ha invertido en operaciones de mantenimiento (indicando veh�culo y cantidad). /
+
+SELECT FROM Transporte;
+SELECT FROM Mantenimiento;
+SELECT Transporte.Cod_Transporte, Transporte.Marca, COUNT( DISTINCT Mantenimiento.Cod_Operacion ) as cantidad_de_mantenimientos FROM Transporte
+LEFT JOIN Mantenimiento
+ON Transporte.Cod_Transporte = Mantenimiento.Cod_Transporte
+GROUP BY Transporte.Cod_Transporte, Transporte.Marca;
+
+/
+9. Dar el nombre de la empresa cuyos veh�culos hayan realizado m�s itinerarios cuyo destino sea "Ciudad del Este". /
+
+SELECT FROM Empresa;
+SELECT FROM Transporte;
+SELECT FROM Transporta;
+SELECT FROM Itinerario;
+
+SELECT * FROM Empresa
+JOIN Transporte ON Transporte.Cod_Empresa = Empresa.Cod_Empresa
+JOIN Transporta ON Transporta.Cod_Transporte = Transporte.Cod_Transporte
+JOIN Itinerario ON Itinerario.Cod_Itinerario = Transporta.Cod_Itinerario
+WHERE Itinerario.Punto_Destino = 'Ciudad del Este'
+
+SELECT Empresa.Nom_Empresa FROM Empresa
+JOIN Transporte ON Transporte.Cod_Empresa = Empresa.Cod_Empresa
+JOIN Transporta ON Transporta.Cod_Transporte = Transporte.Cod_Transporte
+JOIN Itinerario ON Itinerario.Cod_Itinerario = Transporta.Cod_Itinerario
+WHERE Itinerario.Punto_Destino = 'Ciudad del Este'
+GROUP BY Nom_Empresa
+
+/
+10. Obtener aquellas empresas que hayan gastado m�s en mantenimiento que el presupuesto previsto. /
+
+SELECT FROM Empresa;
+SELECT FROM Contrata;
+
+SELECT Empresa.*, SUM( Contrata.Monto ) as Gasto_Mantenimiento FROM Empresa
+JOIN Contrata ON Contrata.Cod_Empresa = Empresa.Cod_Empresa
+GROUP BY Empresa.Cod_Empresa, Nom_Empresa, Domicilio_Empresa, Nro_Empleados, Tipo_Empresa, Nom_Director, Presup_Mant, Vol_Negocio
+
+SELECT FROM
+(
+SELECT Empresa., SUM( Contrata.Monto ) as Gasto_Mantenimiento FROM Empresa
+JOIN Contrata ON Contrata.Cod_Empresa = Empresa.Cod_Empresa
+GROUP BY Empresa.Cod_Empresa, Nom_Empresa, Domicilio_Empresa, Nro_Empleados, Tipo_Empresa, Nom_Director, Presup_Mant, Vol_Negocio
+)
+AS subquery
+WHERE subquery.Gasto_Mantenimiento > subquery.Presup_Mant;
+
+/
+11. Actualizar el presupuesto de las empresas obtenidas en el apartado anterior para que puedan hacer frente a los gastos. /
+UPDATE
+Empresa
+SET
+Empresa.Presup_Mant = empresas_con_muchos_gastos.Gasto_Mantenimiento
+FROM
+Empresa
+JOIN
+(
+SELECT FROM
+(
+SELECT FROM
+(
+SELECT Empresa.*, SUM( Contrata.Monto ) as Gasto_Mantenimiento FROM Empresa
+JOIN Contrata ON Contrata.Cod_Empresa = Empresa.Cod_Empresa
+GROUP BY Empresa.Cod_Empresa, Nom_Empresa, Domicilio_Empresa, Nro_Empleados, Tipo_Empresa, Nom_Director, Presup_Mant, Vol_Negocio
+)
+AS subquery
+WHERE subquery.Gasto_Mantenimiento > subquery.Presup_Mant
+) as subquery2
+) empresas_con_muchos_gastos
+ON Empresa.Cod_Empresa = empresas_con_muchos_gastos.Cod_Empresa

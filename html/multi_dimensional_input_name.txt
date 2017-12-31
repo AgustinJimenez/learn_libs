@@ -1,0 +1,3 @@
+input name for multiple rows: detalles[x][cuenta_nombre][]
+
+Cabecera[abc]----------detalles[0][abc]

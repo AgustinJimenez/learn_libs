@@ -1,0 +1,1 @@
+$("#tabla_detalle_venta").last('tr').find('input[id=descripcion]').focus();

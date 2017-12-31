@@ -1,0 +1,11 @@
+
+crear usuario en mysql 
+========================================================
+CREATE USER 'artronic_admindb'@'localhost' IDENTIFIED BY 'RG->P-V6h5-R?kk_';
+GRANT ALL PRIVILEGES ON * . * TO 'artronic_admindb'@'localhost';
+FLUSH PRIVILEGES;
+
+==SI SALE ERROR DE: Your password does not satisfy the current policy requirements
+ENTONCES:
+Login to the mysql server as root mysql -h localhost -u root -p
+Run the following sql command: uninstall plugin validate_password;

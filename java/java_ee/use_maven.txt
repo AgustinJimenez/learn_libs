@@ -1,0 +1,4 @@
+0- Base Tutorial: http://www.oracle.com/webfolder/technetwork/tutorials/obe/java/basic_app_embedded_tomcat/basic_app-tomcat-embedded.html#section2s1
+
+1- Create new maven proyect (employes app):
+mvn archetype:generate -DarchetypeArtifactId=maven-archetype-webapp -DarchetypeGroupId=org.apache.maven.archetypes -DinteractiveMode=false -DgroupId=com.example.employees -DartifactId=employees-app -DarchetypeVersion=1.0

@@ -1,0 +1,7 @@
+CREATE MODEL WITH MIGRATION WITH CONTROLLER(WITH METHODS)
+-- php artisan make:model Alumno -m -c -r
+
+CREATE MIGRATION COMAND:
+--php artisan make:migration create_users_table
+	ON ASGARDCMS:
+	-php artisan module:make-migration create_tableName_table moduleName

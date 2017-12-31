@@ -1,0 +1,3 @@
+-sudo chown -R your_user /usr/local/lib/node_modules
+-sudo chown -R your_user /usr/local/bin
+-sudo chown -R your_user /usr/local/share

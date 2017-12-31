@@ -1,0 +1,1 @@
+http://stackoverflow.com/questions/43609853/angular-4-and-ionic-3-no-provider-for-http﻿
