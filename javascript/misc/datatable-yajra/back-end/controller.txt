@@ -1,15 +1,21 @@
 public function index_ajax(Request $re)
-{
-    $object = Datatables::of(\Aviso::select('titulo', 'firma', 'fecha', 'tipo'))
-    ->editColumn('tipo', function ($row) 
     {
-            return $row->tipo_formated;
-    })
-    ->setRowClass( function ($tabla) 
-    { 
-        return "text-center"; 
-    })->make(true);
-    $data = $object->getData(true);
+        $object = Datatables::of(\Aviso::select('titulo', 'firma', 'fecha', 'tipo'))
+        ->addColumn('checkbox', function ($row)
+        {
+            return $row->input_checkbox;
+        })
+        ->editColumn('tipo', function ($row) 
+        {
+                return $row->tipo_formated;
+        })
+        ->setRowClass( function ($tabla) 
+        { 
+            return "text-center"; 
+        })
+        ->rawColumns(['checkbox'])
+        ->make(true);
+        $data = $object->getData(true);
 
-    return response()->json( $data );
-}
+        return response()->json( $data );
+    }

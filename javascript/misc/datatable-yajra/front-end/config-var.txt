@@ -1,12 +1,12 @@
 <script type="text/javascript" charset="utf-8">
-	
-	var config = 
-	{
-		datatable:
-		{
-			order: [[ 0, "desc" ]],
-			ajax_source: '{!! route('admin.avisos.aviso.index_ajax') !!}',
-			send_request: function (d) 
+    
+    var config = 
+    {
+        datatable:
+        {
+            order: [[ 0, "desc" ]],
+            ajax_source: '{!! route('admin.avisos.aviso.index_ajax') !!}',
+            send_request: function (d) 
             {
                 //d.tipo = $("#fecha_inicio").val()
             },
@@ -18,16 +18,21 @@
             },
             columns: 
             [
+                { data: 'checkbox', name: 'checkbox', orderable: true, searchable: false},
                 { data: 'titulo', name: 'titulo', orderable: true, searchable: false},
                 { data: 'firma', name: 'firma', orderable: true, searchable: false},
                 { data: 'fecha', name: 'fecha', orderable: true, searchable: false},
                 { data: 'tipo', name: 'tipo', orderable: true, searchable: false}
             ],
             default_datas_count: 25,
-            tool_bar:"<'row'<'col-xs-12'<'col-xs-6'l><'col-xs-6'p>>r>"+
+            tool_bar: '<"toolbar">' + "<'row'<'col-xs-12'<'col-xs-6'l><'col-xs-6'p>>r>"+
                         "<'row'<'col-xs-12't>>"+
                         "<'row'<'col-xs-12'<'col-xs-6'i><'col-xs-6'p>>>"
-		}//end datatable
-	}
+
+
+
+
+        }//end datatable
+    }
 
 </script>

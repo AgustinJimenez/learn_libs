@@ -22,3 +22,8 @@ PATH=$PATH:/opt/gradle/gradle-3.4.1/bin You can run the following command to che
 9eb76efdd3d034dc506c719dac2955efb5ff9a93 Groovy: 2.4.7 Ant: Apache Ant(TM) version 1.9.6 compiled on June 29 2015 JVM: 1.8.0_121 (Oracle Corporation 25.121-b13) OS: Linux 
 4.8.0-41-generic amd64
 The installation is complete. Your system is now ready to build programs using Gradle.
+
+
+ADD ANDROID PATH:
+export ANDROID_HOME=/<installation location>/android-sdk-linux
+export PATH=${PATH}:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools

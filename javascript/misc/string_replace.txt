@@ -1,3 +1,8 @@
+BEST SIMPLE WAY:
+	'hello_world'
+	String('hello_world').split('world').join('microsoft');
+	'hello_microsoft'
+
 Regular Expression Based Implementation
 
 String.prototype.replaceAll = function(search, replacement) {

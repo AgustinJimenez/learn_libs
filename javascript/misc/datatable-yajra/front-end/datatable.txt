@@ -1,19 +1,19 @@
 <script type="text/javascript" charset="utf-8">
-	var table = $('.data-table').DataTable
-	({
-      	dom: config.datatable.tool_bar,
-        "deferRender": true,
+    var table = $('.data-table').DataTable
+    ({
+        dom: config.datatable.tool_bar,
+        deferRender: true,
         processing: true,
         serverSide: true,
-        "order": config.datatable.order,
-        "paginate": true,
-        "lengthChange": true,
-        "iDisplayLength": config.datatable.default_datas_count,
-        "filter": true,
-        "sort": false,
-        "info": true,
-        "autoWidth": true,
-        "paginate": true,
+        order: config.datatable.order,
+        paginate: true,
+        lengthChange: true,
+        iDisplayLength: config.datatable.default_datas_count,
+        filter: true,
+        sort: false,
+        info: true,
+        autoWidth: true,
+        paginate: true,
         //"drawCallback": reordenar_celdas(),
         ajax: 
         {
@@ -21,7 +21,7 @@
             type: "POST",
             headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}'},
             data: config.datatable.send_request,
-            "dataSrc": config.datatable.data_source,
+            dataSrc: config.datatable.data_source,
         },
         columns: config.datatable.columns,
         language: 
