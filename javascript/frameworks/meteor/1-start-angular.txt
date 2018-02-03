@@ -1,0 +1,43 @@
+-- meteor remove blaze-html-templates
+
+-- meteor add angular-templates
+
+-- meteor npm install --save angular angular-meteor
+
+=======================client/main.html=================================
+
+<head>
+  <title>Todo List</title>
+</head>
+ 
+<body>
+  <div class="container" ng-app="simple-todos">
+ 
+  </div>
+</body>
+
+=========================================================================
+
+
+=======================client/main.js=================================
+
+import angular from 'angular';
+import angularMeteor from 'angular-meteor';
+ 
+angular.module('simple-todos', [
+  angularMeteor
+]);
+
+=========================================================================
+
+=======================imports/components/todosList/todosList.html=======
+<header>
+  <h1>Todo List</h1>
+</header>
+ 
+<ul>
+  <li ng-repeat="task in $ctrl.tasks">
+    {{task.text}}
+  </li>
+</ul>
+=========================================================================
