@@ -1,0 +1,34 @@
+============================================================================================================================
+============================================================================================================================
+Deseados:
+
+Si conoce CORS y lo aplica es un plus
+Si se utilizan métodos de colecciones en vez de foreach, sería un plus (filter, map, sum, count, etc...)
+Si conoce de autenticación por token y lo implementa, sería un plus (si es JWT, mejor)
+Si aplica algún filtro en las colecciones devueltas, sería un plus (filtro de campos devueltos, órden, etc...)
+Si el proyecto viene con un Dockerfile, sería un plus
+Si conoce y utiliza Redis, sería un plus
+
+Restricciones
+Aplicar buenas prácticas de programación: consistencia en nombres, espaciado, indentado, etc...
+Debe ser RESTful: las URIs son sustantivos, para el CRUD se deben utilizar los métodos HTTP correspondientes.
+Se deben validar los datos de entrada
+Debe crear la estructura de BBDD con migraciones
+El acceso a datos debe realizarse siempre con Eloquent
+Cuando se obtengan datos relacionados, deben cargarse con "eager loading"
+Siempre se debe devolver un Json
+Debe tener al menos una prueba (simple) con PHPUnit
+Se debe hacer un tett
+
+============================================================================================================================
+============================================================================================================================
+
+
+
+
+
+
+
+
+
+
