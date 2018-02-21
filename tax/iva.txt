@@ -1,0 +1,3 @@
+rubro 1 punto a, montos cobrados sin iva
+rubro 3 punto, montos totales con ivas 10 o 5 menos montos de ivas 10 o 5
+montos con excenta en rubro 6 en (d){ compras excents relacionadas a operaciones exoneradas o no alcanzadas }

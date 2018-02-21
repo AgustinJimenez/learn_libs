@@ -1,0 +1,6 @@
+EXAMPLE:
+
+{
+	"email": "{{ email_env_variable }}",
+	"password": "{{ password_env_variable }}"
+}
