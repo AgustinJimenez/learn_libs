@@ -3,61 +3,61 @@ select
 from 
 	`ope04__remanencias` 
 where 
+(
+	select 
+		count(*) 
+	from 
+		`ope04__cabeceras` 
+	where 
+		`ope04__remanencias`.`cabecera_codigo_sync` = `ope04__cabeceras`.`codigo_sync` 
+	and 
 	(
-		select 
+        select 
 			count(*) 
 		from 
-			`ope04__cabeceras` 
+			`formularios` 
 		where 
-			`ope04__remanencias`.`cabecera_codigo_sync` = `ope04__cabeceras`.`codigo_sync` 
+			`ope04__cabeceras`.`codigo_formulario_sync` = `formularios`.`codigo_sync` 
 		and 
 		(
-            select 
+			select 
 				count(*) 
 			from 
-				`formularios` 
+				`formulario__travesia` 
 			where 
-				`ope04__cabeceras`.`codigo_formulario_sync` = `formularios`.`codigo_sync` 
+				`formularios`.`formulario_travesia_id` = `formulario__travesia`.`id` 
 			and 
 			(
 				select 
 					count(*) 
 				from 
-					`formulario__travesia` 
+					`travesia__travesias` 
 				where 
-					`formularios`.`formulario_travesia_id` = `formulario__travesia`.`id` 
+					`formulario__travesia`.`travesia_id` = `travesia__travesias`.`id` 
 				and 
 				(
 					select 
 						count(*) 
 					from 
-						`travesia__travesias` 
+						`unidad__unidads` 
 					where 
-						`formulario__travesia`.`travesia_id` = `travesia__travesias`.`id` 
+						`travesia__travesias`.`unidad_id` = `unidad__unidads`.`id` 
 					and 
-					(
+                    (
 						select 
 							count(*) 
 						from 
-							`unidad__unidads` 
+							`travesia__travesias` 
 						where 
 							`travesia__travesias`.`unidad_id` = `unidad__unidads`.`id` 
 						and 
-                        (
-							select 
-								count(*) 
-							from 
-								`travesia__travesias` 
-							where 
-								`travesia__travesias`.`unidad_id` = `unidad__unidads`.`id` 
-							and 
-								`id` = 115
-						) >= 1
+							`id` = 115
 					) >= 1
 				) >= 1
 			) >= 1
 		) >= 1
-	) >= 1 
+	) >= 1
+) >= 1 
 order by 
-	`formularios`.`codigo_sync` desc, `fecha` desc, `codigo_sync` desc
+`formularios`.`codigo_sync` desc, `fecha` desc, `codigo_sync` desc
                             
