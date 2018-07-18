@@ -1,0 +1,14 @@
+<div class="col-md-2">
+                                <label for="fecha_inicio" class="control-label">Fecha Inicio (desde):</label>
+                                <div class="inner-addon right-addon">
+                                    <i class="glyphicon glyphicon-trash" id="borrar_fecha_inicio" title="Limpiar filtro"></i>
+                                    <input type="text" class="form-control input-sm" name="fecha_inicio" id="fecha_inicio" value="" readonly="">
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <label for="fecha_fin" class="control-label">Fecha Fin (hasta):</label>
+                                <div class="inner-addon right-addon">
+                                    <i class="glyphicon glyphicon-trash" id="borrar_fecha_fin" title="Limpiar filtro"></i>
+                                    <input type="text" class="form-control input-sm" name="fecha_fin" id="fecha_fin" value="" readonly="">
+                                </div>
+                            </div>
