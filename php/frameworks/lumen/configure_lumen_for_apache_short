@@ -1,0 +1,28 @@
+-INSTALL APACHE ---> "apache2" and "libapache2-mod-php7.2"
+
+-CLONE PROYECT ON "/var/www/html/"
+
+-sudo chgrp -R www-data /var/www/html/your-lumen-project
+-sudo chmod -R 775 /var/www/html/your-lumen-project/storage
+
+-cd /etc/apache2/sites-available
+-sudo nano lumen.conf
+
+==========================================================
+<VirtualHost *:80>
+ ServerName abedkiloo.com
+ServerAdmin abed@abedkiloo.com
+ DocumentRoot /var/www/html/your-laravel-project/public
+<Directory /var/www/html/your-laravel-project>
+ AllowOverride All
+ </Directory>
+ErrorLog ${APACHE_LOG_DIR}/error.log
+ CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>
+==========================================================
+
+-sudo a2dissite 000-default.conf (disable the default .conf file)
+-sudo a2ensite lumen.conf (enables the newly created .conf file)
+-sudo a2enmod rewrite (enables the rewrite)
+
+-sudo service apache2 restart
