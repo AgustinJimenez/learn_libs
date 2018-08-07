@@ -1,6 +1,6 @@
 -INSTALL APACHE ---> "apache2" and "libapache2-mod-php7.2"
 
--CLONE PROYECT ON "/var/www/html/"
+-CLONE PROYECT, INSTALL DEPENDENCIES AND MOVE IT ON "/var/www/html/"
 
 -sudo chgrp -R www-data /var/www/html/your-lumen-project
 -sudo chmod -R 775 /var/www/html/your-lumen-project/storage
@@ -10,8 +10,7 @@
 
 ==========================================================
 <VirtualHost *:80>
- ServerName abedkiloo.com
-ServerAdmin abed@abedkiloo.com
+ ServerName 127.0.0.1
  DocumentRoot /var/www/html/your-laravel-project/public
 <Directory /var/www/html/your-laravel-project>
  AllowOverride All
