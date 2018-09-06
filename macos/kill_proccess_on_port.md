@@ -1,6 +1,6 @@
 FIND PROCCESS THAT IS USING PORT
 
--sudo lsof -i tcp:3000 
+-sudo lsof -i tcp:8000 
 
 KILL PROCCESS BY IS PID
 
