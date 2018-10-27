@@ -21,3 +21,8 @@ echo 'export PATH="$PATH:$HOME/.composer/vendor/bin"' >> ~/.bashrc
 sudo nano ~/.bashrc
 export PATH=$PATH:$HOME/.composer/vendor/bin
 source ~/.bashrc
+
+
+To change the PATH for future terminal sessions, use a command like this:
+
+$ echo 'export PATH="$PATH:/usr/lib/dart/bin"' >> ~/.profile
